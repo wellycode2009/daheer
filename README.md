@@ -99,5 +99,5 @@ The board is infinite. Drag empty space (or hold Space and drag, or middle-mouse
 ## Time zone and the desk clock
 - At first launch the sign-up asks for your time zone the way a Linux installer does: the zone is **detected from the system**, shown first, and you can search any city or country (in your language) to change it. The choice, plus a 12/24-hour style, is saved in settings and can be changed any time from **Settings** or from the **Time** card on the desk.
 - The whole app uses that zone: the desk clock, the greeting, the day boundary for habits and streaks, the focus log and the Tools clock all read `D.now()`.
-- The Time card uses the **Flowers Kingdom** font. **Its licence says "free for personal use only"** - see `ASSET-LICENSES.md` before distributing the app.
+- Public-domain fonts: **Varicka SC** for the clock, **Judges** for note titles, **Northampton** for the date - see `ASSET-LICENSES.md`.
 - Code: `src/ts/timezone.ts` (logic and picker), `src/ts/tzdata.ts` (country/zone table generated from the IANA tz database), tests in `test/timezone.test.js`.
