@@ -1,0 +1,247 @@
+/* ==========================================================
+   Habits view: rows, streaks, activity grid, charts
+   ========================================================== */
+
+.hrow {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+  padding: 10px 0;
+  border-top: 1px solid var(--line)
+}
+
+.hrow:first-child {
+  border-top: 0
+}
+
+.hbtn {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--paper);
+  box-shadow: inset 0 0 0 1.6px var(--line-strong);
+  display: grid;
+  place-items: center;
+  font-size: 19px;
+  transition: background .25s, transform .15s
+}
+
+.hbtn:active {
+  transform: scale(.92)
+}
+
+.hbtn .ok {
+  display: none;
+  color: var(--on-matcha);
+  width: 22px;
+  height: 22px;
+  stroke-width: 2.4
+}
+
+.hrow.done .hbtn {
+  background: var(--matcha-strong);
+  box-shadow: none
+}
+
+.hrow.done .hbtn .emo {
+  display: none
+}
+
+.hrow.done .hbtn .ok {
+  display: block
+}
+
+.hname {
+  font-weight: 600
+}
+
+.hnote {
+  font-size: 13px;
+  color: var(--ink-soft)
+}
+
+.flame {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 700
+}
+
+.flame .i {
+  width: 18px;
+  height: 18px;
+  color: var(--lamp-ic)
+}
+
+.full .hrow {
+  grid-template-columns: auto minmax(0, 1fr) auto auto auto;
+  gap: 18px;
+  padding: 14px 0
+}
+
+.dots7 {
+  display: flex;
+  gap: 5px
+}
+
+.dots7 i {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: var(--h0);
+  box-shadow: inset 0 0 0 1px var(--line)
+}
+
+.dots7 i.on {
+  background: var(--matcha-strong);
+  box-shadow: none
+}
+
+.str {
+  width: 90px
+}
+
+.str small {
+  display: block;
+  font-size: 12px;
+  color: var(--ink-soft);
+  margin-bottom: 4px
+}
+
+.kind {
+  font-size: 12px;
+  padding: 2px 9px;
+  border-radius: 99px;
+  background: var(--tile);
+  color: var(--ink-soft);
+  margin-inline-start: 8px;
+  font-weight: 500;
+  vertical-align: 1px
+}
+
+.heat {
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-rows: repeat(7, auto);
+  grid-template-columns: repeat(var(--w), 1fr);
+  gap: 4px
+}
+
+.heat i {
+  display: block;
+  aspect-ratio: 1;
+  border-radius: 4px;
+  background: var(--h0)
+}
+
+.heat i.l1 {
+  background: var(--h1)
+}
+
+.heat i.l2 {
+  background: var(--h2)
+}
+
+.heat i.l3 {
+  background: var(--h3)
+}
+
+.heat i.l4 {
+  background: var(--h4)
+}
+
+.card .heat {
+  margin: 10px 0
+}
+
+.legend {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12.5px;
+  color: var(--ink-soft);
+  margin-top: 12px;
+  justify-content: flex-end
+}
+
+.legend i {
+  width: 13px;
+  height: 13px;
+  border-radius: 4px;
+  display: block
+}
+
+.hgrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr);
+  gap: 16px;
+  align-items: start
+}
+
+.hgrid .card {
+  margin: 0
+}
+
+.bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  height: 150px;
+  margin-top: 14px
+}
+
+.bars div {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 6px;
+  height: 100%;
+  font-size: 12px;
+  color: var(--ink-soft)
+}
+
+.bars i {
+  display: block;
+  width: 100%;
+  border-radius: 8px 8px 4px 4px;
+  background: var(--h2)
+}
+
+.bars .peak i {
+  background: var(--lamp)
+}
+
+.scroll-x {
+  overflow-x: auto
+}
+
+.scroll-x .heat {
+  min-width: 560px
+}
+
+/* v3 habit analytics */
+.school-report{display:grid;gap:14px;background:linear-gradient(135deg,var(--pine),var(--surface));color:var(--on-pine)}
+.school-report .meta{color:rgba(234,242,225,.72)}
+.report-grade{font:700 32px var(--f-display);color:var(--lamp)}
+.report-overview{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:center}
+.report-overview>b,.report-overview>div:first-child b{font-size:40px;line-height:1}
+.report-overview small{opacity:.7}
+.report-overview p{grid-column:1/-1;margin:0}
+.results{display:grid;gap:8px}
+.result-row{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:12px;align-items:center;padding:10px 0;border-top:1px solid rgba(255,255,255,.1)}
+.result-name{display:flex;flex-direction:column;min-width:0}.result-name b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.result-name small{color:rgba(234,242,225,.72);font-size:12px;margin-top:3px}
+.result-grade{font-weight:800;min-width:34px;text-align:center}.result-score{font-size:13px;opacity:.75;min-width:28px;text-align:end}
+.recommended{margin-top:16px}.recommend-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}.rec-chip{display:grid;grid-template-columns:auto 1fr;gap:0 8px;align-items:center;padding:10px;border:1px solid var(--line);border-radius:14px;text-align:start;background:var(--paper);color:var(--ink)}.rec-chip span{grid-row:span 2;font-size:20px}.rec-chip b{font-size:13px}.rec-chip small{color:var(--ink-soft)}.rec-chip.added{opacity:.6}.rec-chip em{grid-column:2;color:var(--matcha-strong);font-style:normal;font-size:11px;margin-top:2px}
+@media(max-width:1180px){.recommend-grid{grid-template-columns:repeat(2,1fr)}}
+
+.report-page{display:grid;gap:16px}.report-hero{display:grid;grid-template-columns:220px minmax(0,1fr);gap:24px;align-items:center}.report-hero-score{display:grid;place-items:center;align-content:center;gap:2px}.report-hero-score span{font-size:13px;color:rgba(234,242,225,.72)}.report-hero-score b{font:400 64px/1 var(--f-display)}.report-hero-score em{font:700 24px var(--f-display);color:var(--lamp);font-style:normal}.report-hero-copy h2{margin:0 0 5px}.report-hero-copy p{color:rgba(234,242,225,.78);margin:0 0 12px}.report-table-wrap{overflow:auto}.report-table{width:100%;border-collapse:collapse;min-width:650px}.report-table th,.report-table td{padding:12px 8px;border-top:1px solid var(--line);text-align:start}.report-table thead th{font-size:12px;color:var(--ink-soft);font-weight:600;border-top:0}.report-table tbody th{font-weight:600}.report-table tbody th span,.report-table tbody th small{display:block}.report-table tbody th small{font-size:11px;color:var(--ink-soft);font-weight:400;margin-top:3px}.report-actions{list-style:none;padding:0;margin:0;display:grid;gap:8px}.report-actions li{display:flex;justify-content:space-between;gap:15px;padding:12px 0;border-top:1px solid var(--line)}.report-actions li:first-child{border-top:0}.report-actions span{color:var(--ink-soft);max-width:60ch;text-align:end}@media(max-width:700px){.report-hero{grid-template-columns:1fr}.report-hero-score{place-items:start}.report-actions li{display:grid}.report-actions span{text-align:start}}
+
+
+/* habit list filters (search + chips) */
+.hfilters { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 4px 0 12px }
+.hfilters .inp { flex: 1 1 160px; min-width: 0 }
+[data-hlist].hide-done .hrow.done { display: none }
+[data-hlist].due-only .hrow.off { display: none }

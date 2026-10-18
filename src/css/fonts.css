@@ -1,0 +1,66 @@
+/* Latin type (SIL Open Font License), bundled so the app works offline.
+   Arabic type (Thmanyah) is loaded from packed files by js/i18n.js. */
+@font-face { font-family: "Young Serif"; font-style: normal; font-weight: 400; font-display: swap;
+  src: url(../assets/fonts/latin/young-serif-latin-400-normal.woff2) format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "Young Serif"; font-style: normal; font-weight: 400; font-display: swap;
+  src: url(../assets/fonts/latin/young-serif-latin-ext-400-normal.woff2) format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: Figtree; font-style: normal; font-weight: 300 900; font-display: swap;
+  src: url(../assets/fonts/latin/figtree-latin-wght-normal.woff2) format("woff2-variations");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: Figtree; font-style: normal; font-weight: 300 900; font-display: swap;
+  src: url(../assets/fonts/latin/figtree-latin-ext-wght-normal.woff2) format("woff2-variations");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: Caveat; font-style: normal; font-weight: 500; font-display: swap;
+  src: url(../assets/fonts/latin/caveat-latin-500-normal.woff2) format("woff2"); }
+@font-face { font-family: Caveat; font-style: normal; font-weight: 600; font-display: swap;
+  src: url(../assets/fonts/latin/caveat-latin-600-normal.woff2) format("woff2"); }
+
+
+/* Arabic typography. Thmanyah is loaded by js/i18n.js from the user's licensed
+   local font installation before the Arabic view is painted. */
+html[data-text-dir="rtl"] {
+  --f-ui: "Thmanyah Sans", system-ui, "Segoe UI", Tahoma, Arial, sans-serif;
+  --f-display: "Thmanyah Serif Display", "Thmanyah Serif Text", Georgia, "Times New Roman", serif;
+  --f-hand: "Thmanyah Sans", system-ui, Tahoma, Arial, sans-serif;
+  font-feature-settings: "kern" 1, "liga" 1;
+  text-rendering: optimizeLegibility;
+}
+
+html[data-text-dir="rtl"] .head > div,
+html[data-text-dir="rtl"] .head h1,
+html[data-text-dir="rtl"] .head .sub,
+html[data-text-dir="rtl"] .card h3,
+html[data-text-dir="rtl"] .card .meta,
+html[data-text-dir="rtl"] .card > p,
+html[data-text-dir="rtl"] .card figcaption,
+html[data-text-dir="rtl"] .mini,
+html[data-text-dir="rtl"] .dlg,
+html[data-text-dir="rtl"] .fld,
+html[data-text-dir="rtl"] .about-copy,
+html[data-text-dir="rtl"] .adventure,
+html[data-text-dir="rtl"] .achievements {
+  text-align: start;
+}
+
+/* Flex/grid direction now comes from <html dir="rtl">. Deliberately technical
+   surfaces keep explicit dir="ltr" where their semantics require it. */
+html[data-text-dir="rtl"] .about-body { direction: inherit; }
+html[data-text-dir="rtl"] .capture { direction: rtl; }
+html[data-text-dir="rtl"] .nav button,
+html[data-text-dir="rtl"] .tog { direction: inherit; }
+html[data-text-dir="rtl"] .nav button span,
+html[data-text-dir="rtl"] .tog .lbl { direction: rtl; }
+html[data-text-dir="rtl"] input:not([dir="ltr"]),
+html[data-text-dir="rtl"] textarea:not([dir="ltr"]),
+html[data-text-dir="rtl"] select:not([dir="ltr"]) {
+  direction: rtl;
+  text-align: start;
+}
+
+/* Flowers Kingdom (Imagex, 2016) - used only for the desk clock. Its licence is "free for personal use only" (see ASSET-LICENSES.md).
+   Its glyphs are about 1.9 em tall, so the vertical metrics are overridden to give the clock a sensible line box. */
+@font-face { font-family: "Flowers Kingdom"; font-style: normal; font-weight: 400; font-display: swap;
+  src: url("../assets/fonts/latin/FlowersKingdom.ttf") format("truetype");
+  ascent-override: 190%; descent-override: 6%; line-gap-override: 0%; }

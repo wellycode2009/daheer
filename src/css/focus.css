@@ -1,0 +1,202 @@
+/* ==========================================================
+   Focus view: timer, clock styles, sounds, history
+   ========================================================== */
+
+.focus {
+  display: grid;
+  grid-template-columns: minmax(260px, 380px) minmax(0, 1fr);
+  gap: 20px;
+  align-items: start
+}
+
+.scene-card {
+  margin: 0;
+  padding: 14px
+}
+
+.fpanel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between
+}
+
+.clockwrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 26px 16px 22px
+}
+
+.clockwrap .card-in {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px
+}
+
+#clock {
+  min-height: 250px;
+  display: grid;
+  place-items: center
+}
+
+.ringbox {
+  position: relative;
+  width: 240px;
+  height: 240px
+}
+
+.ringbox svg {
+  width: 100%;
+  height: 100%
+}
+
+.ringbox circle {
+  fill: none;
+  stroke-width: 9
+}
+
+.ringbox .trk {
+  stroke: var(--line)
+}
+
+.ringbox .prg {
+  stroke: var(--matcha-strong);
+  stroke-linecap: round;
+  transition: stroke-dashoffset 1s linear
+}
+
+.dg {
+  font: 400 54px/1 var(--f-display);
+  letter-spacing: -.02em
+}
+
+.ringbox .dg {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center
+}
+
+.flip {
+  display: flex;
+  align-items: center;
+  gap: 8px
+}
+
+.flip .tile {
+  width: 62px;
+  height: 88px;
+  border-radius: 14px;
+  background: var(--pine);
+  color: var(--on-pine);
+  display: grid;
+  place-items: center;
+  font: 400 52px/1 var(--f-display);
+  position: relative
+}
+
+.flip .tile::after {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0;
+  inset-inline-end: 0;
+  top: 50%;
+  height: 2px;
+  background: var(--surface);
+  opacity: .55
+}
+
+.flip b {
+  font: 400 40px/1 var(--f-display);
+  margin: 0 2px
+}
+
+.dotclock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px
+}
+
+.dotclock .grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px
+}
+
+.dotclock .grid i {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--h0);
+  box-shadow: inset 0 0 0 1px var(--line)
+}
+
+.dotclock .grid i.on {
+  background: var(--matcha-strong);
+  box-shadow: none
+}
+
+.dotclock .grid i.now {
+  background: var(--lamp);
+  box-shadow: none
+}
+
+.dotclock .dg {
+  font-size: 40px
+}
+
+.clocklabel {
+  color: var(--ink-soft);
+  font-weight: 500
+}
+
+.center {
+  justify-content: center;
+  text-align: center
+}
+
+.fgrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px
+}
+
+.fgrid .card {
+  margin: 0
+}
+
+.fgrid .wide {
+  grid-column: 1/-1
+}
+
+.hist {
+  display: flex;
+  flex-direction: column;
+  margin-top: 12px
+}
+
+.hist div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 0;
+  border-top: 1px solid var(--line);
+  font-size: 14px
+}
+
+.hist span:last-child {
+  color: var(--ink-soft);
+  white-space: nowrap
+}

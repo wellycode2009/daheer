@@ -1,0 +1,146 @@
+/* ==========================================================
+   Responsive rules and reduced motion
+   ========================================================== */
+
+@media (max-width:1180px) {
+  .board {
+    column-count: 2
+  }
+
+  .dn {
+    grid-template-columns: 1fr
+  }
+
+  .hgrid {
+    grid-template-columns: 1fr
+  }
+}
+
+@media (max-width:1000px) {
+  .notes {
+    grid-template-columns: 1fr
+  }
+
+  .nlist {
+    display: none
+  }
+
+  .focus {
+    grid-template-columns: 1fr
+  }
+
+  .scene-card {
+    max-width: 380px
+  }
+}
+
+@media (max-width:820px) {
+  .app {
+    grid-template-columns: 1fr;
+    grid-template-rows: minmax(0, 1fr) auto
+  }
+
+  .main {
+    grid-row: 1;
+    margin: 8px 8px 0;
+    border-radius: 22px
+  }
+
+  .side {
+    grid-row: 2;
+    flex-direction: row;
+    align-items: center;
+    gap: 2px;
+    padding: 6px 8px 8px;
+    overflow: visible
+  }
+
+  .brand,
+  .mini,
+  .tog .lbl,
+  .tog .sw {
+    display: none
+  }
+
+  .nav {
+    flex-direction: row;
+    flex: 1;
+    gap: 2px
+  }
+
+  .nav button {
+    flex-direction: column;
+    gap: 3px;
+    padding: 8px 2px;
+    font-size: 11px;
+    justify-content: center;
+    align-items: center;
+    text-align: center
+  }
+
+  .ambience {
+    flex-direction: row;
+    margin: 0;
+    gap: 0
+  }
+
+  .tog {
+    width: auto;
+    padding: 12px 10px
+  }
+
+  .full .hrow {
+    grid-template-columns: auto minmax(0, 1fr) auto
+  }
+
+  .full .dots7,
+  .full .str {
+    display: none
+  }
+
+  .blk::before {
+    display: none
+  }
+
+  .type-grid {
+    grid-template-columns: 1fr
+  }
+
+  .fgrid {
+    grid-template-columns: 1fr
+  }
+}
+
+@media (max-width:640px) {
+  .board {
+    column-count: 1
+  }
+
+  .flip .tile {
+    width: 54px;
+    height: 78px;
+    font-size: 44px
+  }
+}
+
+@media (prefers-reduced-motion:reduce) {
+
+  *,
+  *::before,
+  *::after {
+    transition: none !important
+  }
+
+  .drop,
+  .steam {
+    animation: none
+  }
+
+  .drop {
+    display: none
+  }
+
+  #rainCanvas {
+    display: none
+  }
+}

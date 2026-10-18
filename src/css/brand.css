@@ -1,0 +1,122 @@
+/* ==========================================================
+   Brand: full logo, with explicit bounds so the original SVG
+   never gets clipped by the sidebar or a malformed viewBox.
+   ========================================================== */
+
+:root {
+  --k-ink: #24392C;
+  --k-fill: #BCD39A;
+  --k-leaf: #5E8F4E;
+  --k-lamp: #EDBB63;
+  --k-rain: #24392C;
+  --k-pot: #F3F6EC;
+  --k-paper: #F3F6EC;
+  --k-hi: #EDBB63;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --k-ink: #F3F6EC;
+    --k-fill: #41684C;
+    --k-leaf: #B4D18E;
+    --k-lamp: #F0C67A;
+    --k-rain: #F3F6EC;
+    --k-pot: #F3F6EC;
+    --k-paper: #F3F6EC;
+    --k-hi: #F0C67A;
+  }
+}
+
+:root[data-theme="dark"] {
+  --k-ink: #F3F6EC;
+  --k-fill: #41684C;
+  --k-leaf: #B4D18E;
+  --k-lamp: #F0C67A;
+  --k-rain: #F3F6EC;
+  --k-pot: #F3F6EC;
+  --k-paper: #F3F6EC;
+  --k-hi: #F0C67A;
+}
+
+/* Sidebar brand: use the complete horizontal master mark so neither
+   the wordmark nor the icon gets clipped by separate SVG viewboxes. */
+.brand {
+  gap: 0;
+  direction: inherit;
+  min-width: 0;
+  min-height: 64px;
+  width: 100%;
+  overflow: visible;
+  display: flex;
+  align-items: center;
+  padding: 2px 8px;
+  box-sizing: border-box;
+}
+
+.brand-logo-en {
+  display: block;
+  width: 168px;
+  height: 68px;
+  max-width: 100%;
+  flex: 0 1 auto;
+  overflow: visible;
+}
+
+.brand-logo-ar {
+  display: none;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+  max-width: 100%;
+  overflow: visible;
+}
+
+.brand-logo-ar .bm {
+  width: 38px;
+  height: 50px;
+  flex: 0 0 38px;
+  overflow: visible;
+}
+
+.brand-wordmark-ar {
+  display: block;
+  flex: 0 0 auto;
+  white-space: nowrap;
+  overflow: visible;
+  color: var(--k-ink);
+  font: 500 clamp(30px, 3vw, 38px)/1.05 "Thmanyah Serif Display", "Thmanyah Serif Text", Georgia, serif;
+  letter-spacing: 0;
+  margin: 0;
+  text-rendering: optimizeLegibility;
+}
+
+/* Logo card on the Design notes screen */
+.logo-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: clamp(16px, 4vw, 40px);
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.logo-card svg {
+  width: 100%;
+  height: auto;
+  max-width: 460px;
+  justify-self: center;
+}
+
+@media (max-width: 820px) {
+  .logo-card {
+    grid-template-columns: 1fr;
+  }
+
+  .brand-logo-en {
+    width: 154px;
+    height: 62px;
+  }
+}
+
+html[data-text-dir="rtl"] .brand { direction: rtl; }
+html[data-text-dir="rtl"] .brand-logo-en { display: none; }
+html[data-text-dir="rtl"] .brand-logo-ar { display: flex; flex-direction: row; }

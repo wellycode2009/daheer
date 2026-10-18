@@ -1,0 +1,241 @@
+/* ==========================================================
+   Layout: sidebar, main panel, page headers
+   ========================================================== */
+
+/* The slider knob follows inline-start in both writing directions. */
+html[dir="ltr"] { --dir: 1; }
+html[dir="rtl"] { --dir: -1; }
+
+.app {
+  position: fixed;
+  inset: 0;
+  width: auto;
+  height: auto;
+  min-width: 0;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 248px minmax(0, 1fr);
+  direction: inherit;
+}
+
+html[data-text-dir="rtl"] .app { direction: rtl; }
+.app > .side { grid-column: 1; }
+.app > .main { grid-column: 2; }
+
+.side {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  padding-block: 22px 16px;
+  padding-inline: 20px 16px;
+  min-height: 0;
+  overflow-y: auto
+}
+
+.main {
+  min-width: 0;
+  min-height: 0;
+  height: auto;
+  margin-block: 12px;
+  margin-inline: 0 12px;
+  background: var(--surface);
+  border-radius: 28px;
+  overflow: auto;
+  position: relative;
+  transition: background .5s
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 2px 8px
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px
+}
+
+.nav button {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 14px;
+  font-weight: 500;
+  text-align: start;
+  color: var(--ink-soft);
+  transition: background .2s, color .2s
+}
+
+.nav button:hover {
+  background: var(--hover);
+  color: var(--ink)
+}
+
+.nav button[aria-current="page"] {
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: 0 1px 0 var(--line)
+}
+
+.mini {
+  background: var(--matcha-soft);
+  border-radius: 18px;
+  padding: 14px
+}
+
+.mini strong {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600
+}
+
+.mini .i {
+  color: var(--lamp-ic)
+}
+
+.mini p {
+  font-size: 13px;
+  color: var(--ink-soft);
+  margin: 6px 0 10px
+}
+
+.bar {
+  height: 6px;
+  border-radius: 99px;
+  background: var(--line);
+  overflow: hidden
+}
+
+.bar i {
+  display: block;
+  height: 100%;
+  border-radius: 99px;
+  background: var(--matcha-strong);
+  transition: width .5s
+}
+
+.ambience {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 4px
+}
+
+.tog {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 14px;
+  color: var(--ink-soft);
+  font-weight: 500;
+  text-align: start
+}
+
+.tog:hover {
+  background: var(--hover);
+  color: var(--ink)
+}
+
+.tog .lbl {
+  flex: 1
+}
+
+.sw {
+  width: 32px;
+  height: 18px;
+  border-radius: 99px;
+  background: var(--line-strong);
+  position: relative;
+  transition: background .3s
+}
+
+.sw::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  inset-inline-start: 2px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--paper);
+  transition: transform .3s
+}
+
+.tog[aria-pressed="true"] {
+  color: var(--ink)
+}
+
+.tog[aria-pressed="true"] .sw {
+  background: var(--matcha-strong)
+}
+
+.tog[aria-pressed="true"] .sw::after {
+  transform: translateX(calc(14px * var(--dir, 1)))
+}
+
+.pad {
+  padding: 30px clamp(18px, 3vw, 40px) 48px
+}
+
+.head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 26px
+}
+
+.head h1 {
+  font: 400 clamp(32px, 4.2vw, 46px)/1.05 var(--f-display);
+  letter-spacing: -.015em;
+  margin-bottom: 8px
+}
+
+.sub {
+  color: var(--ink-soft);
+  max-width: 52ch
+}
+
+.capture {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 99px;
+  padding: 9px 14px;
+  min-width: min(320px, 100%);
+  color: var(--ink-soft)
+}
+
+.capture input {
+  flex: 1;
+  min-width: 0;
+  background: none;
+  border: 0;
+  outline: 0
+}
+
+.capture:focus-within {
+  border-color: var(--matcha-strong)
+}
+
+kbd {
+  font: 500 12px var(--f-ui);
+  background: var(--tile);
+  border-radius: 6px;
+  padding: 2px 7px;
+  color: var(--ink-soft)
+}
+

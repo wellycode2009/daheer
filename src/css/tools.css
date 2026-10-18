@@ -1,0 +1,103 @@
+/* ==========================================================
+   Tools: launcher grid + the seven small tools
+   ========================================================== */
+
+.tools-body { max-width: 920px }
+
+/* ---- launcher grid ---- */
+.tools-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px }
+.tool-card { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; padding: 20px; border-radius: 20px; background: var(--tile); text-align: start; transition: transform .16s, background .2s }
+.tool-card:hover { transform: translateY(-2px); background: var(--matcha-soft) }
+.tool-ic { display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 14px; background: var(--paper) }
+.tool-ic .i { width: 22px; height: 22px }
+.tool-card b { font: 400 17px/1.3 var(--f-display) }
+.tool-card small { color: var(--ink-soft); line-height: 1.4 }
+
+/* ---- sticky notes ---- */
+.sticky-board { display: flex; flex-wrap: wrap; gap: 14px; align-items: flex-start }
+.sticky-card { position: relative; width: 190px; min-height: 150px; padding: 16px 14px 12px; border-radius: 6px 6px 16px 16px; box-shadow: 0 8px 18px rgba(0, 0, 0, .12) }
+.sticky-card .hand { min-height: 90px; font-family: var(--f-display); font-size: 15px; line-height: 1.4; outline: none }
+.sticky-card .hand:empty:before { content: attr(data-ph); opacity: .5 }
+.sticky-del { position: absolute; top: 6px; inset-inline-end: 6px; width: 24px; height: 24px; opacity: .55 }
+.sticky-del:hover { opacity: 1; background: rgba(0, 0, 0, .08) }
+.sticky-del .i { width: 14px; height: 14px }
+.sticky-colors { display: flex; gap: 6px; margin-top: 10px }
+.swatch { width: 15px; height: 15px; border-radius: 50%; box-shadow: inset 0 0 0 1px var(--line-strong) }
+.swatch.on { box-shadow: 0 0 0 2px var(--surface), 0 0 0 3.5px var(--ink) }
+.sw-lamp { background: var(--lamp) }
+.sw-matcha { background: var(--matcha-strong) }
+.sw-mist { background: var(--mist-soft) }
+.sw-pine { background: var(--pine) }
+.sw-paper { background: var(--paper) }
+.sticky-add { width: 190px; min-height: 150px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; border-radius: 16px; box-shadow: inset 0 0 0 2px dashed var(--line-strong); border: 2px dashed var(--line-strong); color: var(--ink-soft) }
+.sticky-add:hover { background: var(--tile); color: var(--ink) }
+
+/* ---- mp3 player ---- */
+.mp3-tool { display: flex; flex-direction: column; gap: 12px }
+.mp3-now { display: flex; align-items: center; gap: 12px }
+.mp3-now .i { width: 26px; height: 26px }
+.mp3-now small { display: block; color: var(--lamp-ic) }
+.mp3-now b { font: 400 17px/1.3 var(--f-display) }
+.mp3-seek-row { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--ink-soft) }
+.mp3-seek-row input[type="range"] { flex: 1 }
+.mp3-controls { display: flex; align-items: center; justify-content: center; gap: 10px }
+.ib.lg { width: 52px; height: 52px; background: var(--paper) }
+.ib.lg .i { width: 24px; height: 24px }
+.mp3-vol { display: flex; align-items: center; gap: 6px; margin-inline-start: auto }
+.mp3-vol input[type="range"] { width: 90px }
+.mp3-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; max-height: 260px; overflow: auto }
+.mp3-list li { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 12px }
+.mp3-list li.on { background: var(--paper) }
+.mp3-list li .i { width: 16px; height: 16px; flex: none }
+.mp3-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13.5px }
+input[type="range"] { accent-color: var(--matcha-strong) }
+
+/* ---- video player ---- */
+.mp4-tool { display: flex; flex-direction: column; gap: 10px }
+.mp4-inputrow { display: flex; gap: 8px }
+.mp4-inputrow .inp { flex: 1 }
+.mp4-recent .chips { display: flex; flex-wrap: wrap; gap: 6px }
+.mp4-slot:empty, .mp4-slot { min-height: 0 }
+.mp4-empty { padding: 30px 0; text-align: center }
+.mp4-el, video.mp4-el { width: 100%; max-height: 60vh; border-radius: 16px; background: #000; display: block }
+
+/* ---- calendar ---- */
+.cal-tool { max-width: 480px }
+.cal-wd { display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; font-size: 11.5px; color: var(--ink-soft); margin: 10px 0 4px }
+.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px }
+.cal-cell { aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; border-radius: 12px; position: relative }
+.cal-cell.empty { visibility: hidden }
+button.cal-cell:hover { background: var(--tile) }
+.cal-cell.today { background: var(--matcha-strong); color: var(--on-matcha) }
+.cal-cell .cal-n { font-size: 13px }
+.cal-cell .dot { width: 5px; height: 5px; border-radius: 50%; display: inline-block; margin: 0 1px }
+.dot-habit { background: var(--matcha-strong) }
+.cal-cell.today .dot-habit { background: var(--on-matcha) }
+.dot-due { background: var(--lamp-ic) }
+.cal-legend { display: flex; gap: 16px; margin-top: 12px; font-size: 12.5px; color: var(--ink-soft) }
+.cal-legend span { display: inline-flex; align-items: center; gap: 6px }
+.cal-legend .dot { width: 8px; height: 8px; border-radius: 50% }
+
+/* ---- clock / stopwatch / timer ---- */
+.clock-tabs { margin-bottom: 14px }
+.clock-face { display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center; padding: 32px 20px }
+.clock-time { font: 400 52px/1 var(--f-display); font-variant-numeric: tabular-nums }
+.clock-date { color: var(--ink-soft) }
+.clock-actions { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center }
+.clock-face .bar.thick { width: 100%; max-width: 320px }
+.laps { list-style: none; margin: 8px 0 0; padding: 0; width: 100%; max-width: 280px; display: flex; flex-direction: column; gap: 4px }
+.laps li { display: flex; justify-content: space-between; font-size: 13.5px; padding: 6px 4px; border-top: 1px solid var(--line) }
+.laps li:first-child { border-top: 0 }
+
+/* ---- pdf reader ---- */
+.pdf-tool { display: flex; flex-direction: column; gap: 10px }
+.pdf-frame { width: 100%; height: 70vh; border: 0; border-radius: 14px; background: var(--paper); box-shadow: inset 0 0 0 1px var(--line) }
+.meta.small { font-size: 12px }
+
+@media (max-width: 860px) {
+  .tools-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) }
+}
+@media (max-width: 560px) {
+  .tools-grid { grid-template-columns: 1fr }
+  .clock-time { font-size: 40px }
+}

@@ -1,0 +1,413 @@
+/* ==========================================================
+   Components: buttons, chips, cards, checklists
+   ========================================================== */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 11px 18px;
+  border-radius: 99px;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 1;
+  background: var(--btn-bg);
+  color: var(--btn-fg);
+  transition: transform .15s, opacity .2s
+}
+
+.btn:hover {
+  opacity: .9
+}
+
+.btn:active {
+  transform: scale(.97)
+}
+
+.btn .i {
+  width: 16px;
+  height: 16px
+}
+
+.btn-warm {
+  background: var(--lamp);
+  color: #2B2B13
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--ink);
+  box-shadow: inset 0 0 0 1.5px var(--line-strong)
+}
+
+.btn[disabled] {
+  opacity: .55;
+  cursor: default
+}
+
+.chip {
+  padding: 8px 14px;
+  border-radius: 99px;
+  background: var(--tile);
+  font-weight: 500;
+  font-size: 14px;
+  transition: background .2s
+}
+
+.chip[aria-pressed="true"] {
+  background: var(--matcha-strong);
+  color: var(--on-matcha)
+}
+
+.tag {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 99px;
+  background: var(--tile);
+  font-size: 12.5px;
+  color: var(--ink-soft)
+}
+
+.seg {
+  display: inline-flex;
+  background: var(--tile);
+  padding: 3px;
+  border-radius: 99px;
+  gap: 2px
+}
+
+.seg button {
+  padding: 7px 14px;
+  border-radius: 99px;
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--ink-soft);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px
+}
+
+.seg button .i {
+  width: 16px;
+  height: 16px
+}
+
+.seg button[aria-pressed="true"] {
+  background: var(--paper);
+  color: var(--ink);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, .08)
+}
+
+.meta {
+  color: var(--ink-soft);
+  font-size: 13.5px
+}
+
+/* cards */
+.board {
+  column-count: 3;
+  column-gap: 16px
+}
+
+.card {
+  break-inside: avoid;
+  display: block;
+  margin: 0 0 16px;
+  padding: 18px;
+  border-radius: 22px;
+  background: var(--tile);
+  position: relative
+}
+
+.card h3 {
+  font: 400 19px/1.25 var(--f-display);
+  margin-bottom: 4px
+}
+
+.card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 8px
+}
+
+.c-paper {
+  background: var(--paper);
+  box-shadow: inset 0 0 0 1px var(--line)
+}
+
+.c-matcha {
+  background: var(--matcha-soft)
+}
+
+.c-mist {
+  background: var(--mist-soft)
+}
+
+.c-lamp {
+  background: var(--lamp-soft)
+}
+
+.c-pine {
+  background: var(--pine);
+  color: var(--on-pine);
+  box-shadow: inset 0 0 0 1px var(--line)
+}
+
+.c-pine .meta,
+.c-pine figcaption {
+  color: rgba(234, 242, 225, .72)
+}
+
+.card[role="link"] {
+  cursor: pointer;
+  transition: transform .2s
+}
+
+.card[role="link"]:hover {
+  transform: translateY(-2px)
+}
+
+.card-focus {
+  padding: 14px 14px 18px
+}
+
+.card-focus h3 {
+  margin-top: 14px
+}
+
+.card-focus .btn {
+  margin-top: 14px
+}
+
+.art {
+  border-radius: 18px;
+  overflow: hidden
+}
+
+.art svg {
+  display: block;
+  width: 100%;
+  height: auto
+}
+
+.drop {
+  stroke: var(--drop-line);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  animation: fall 1.6s linear infinite
+}
+
+@keyframes fall {
+  from {
+    transform: translate(0, 0)
+  }
+
+  to {
+    transform: translate(-52px, 480px)
+  }
+}
+
+.steam {
+  fill: none;
+  stroke: var(--steam);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  animation: steam 3.6s ease-in-out infinite
+}
+
+@keyframes steam {
+  0% {
+    opacity: 0;
+    transform: translateY(6px)
+  }
+
+  40% {
+    opacity: .9
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(-8px)
+  }
+}
+
+.pinart {
+  display: block;
+  width: 100%;
+  height: 150px
+}
+
+.pin figcaption {
+  font-size: 13.5px;
+  margin-top: 10px;
+  color: var(--ink-soft)
+}
+
+.pin {
+  margin-inline: 0
+}
+
+.sticky {
+  transform: rotate(-1.2deg);
+  padding: 26px 22px 22px
+}
+
+.tape {
+  position: absolute;
+  top: -9px;
+  inset-inline-start: 50%;
+  width: 74px;
+  height: 20px;
+  margin-inline-start: -37px;
+  background: var(--matcha-soft);
+  opacity: .9;
+  border-radius: 3px;
+  transform: rotate(3deg);
+  box-shadow: 0 0 0 1px var(--line)
+}
+
+.hand {
+  font: 600 29px/1.15 var(--f-hand);
+  color: var(--ink)
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 10px 0
+}
+
+.note p {
+  font-size: 14.5px;
+  color: var(--ink-soft)
+}
+
+.mosaic {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  grid-template-rows: 64px 64px;
+  gap: 6px;
+  margin-bottom: 12px
+}
+
+.mosaic div {
+  border-radius: 14px;
+  overflow: hidden;
+  display: grid;
+  place-items: center
+}
+
+.mosaic svg {
+  width: 100%;
+  height: 100%
+}
+
+.mosaic .m1 {
+  grid-row: span 2;
+  background: var(--pine)
+}
+
+.mosaic .m2 {
+  background: var(--matcha-soft)
+}
+
+.mosaic .m3 {
+  background: var(--lamp-soft)
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 10px 0 12px
+}
+
+input[type=range] {
+  width: 100%;
+  accent-color: var(--matcha-strong)
+}
+
+/* checklist */
+.chk {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 6px 0;
+  cursor: pointer
+}
+
+.chk input {
+  appearance: none;
+  -webkit-appearance: none;
+  flex: none;
+  width: 20px;
+  height: 20px;
+  margin: 1px 0 0;
+  border-radius: 7px;
+  border: 1.6px solid var(--ink-soft);
+  display: grid;
+  place-content: center;
+  background: transparent;
+  cursor: pointer;
+  transition: background .2s, border-color .2s
+}
+
+.chk input:checked {
+  background: var(--matcha-strong);
+  border-color: var(--matcha-strong)
+}
+
+.chk input:checked::after {
+  content: "";
+  width: 9px;
+  height: 5px;
+  border: 2px solid var(--on-matcha);
+  border-top: 0;
+  border-inline-end: 0;
+  transform: rotate(-45deg) translate(1px, -1px)
+}
+
+.chk input:checked+span {
+  color: var(--ink-soft);
+  text-decoration: line-through;
+  text-decoration-color: var(--matcha-strong)
+}
+
+.from {
+  margin-top: 8px;
+  font-size: 12.5px
+}
+
+/* ==========================================================
+   Calculator tool (dialog opened by D.calc.open())
+   ========================================================== */
+.calc-dialog .dlg-b { padding-top: 4px; }
+.calc-tool { display: flex; flex-direction: column; gap: 14px; outline: none; }
+.calc-screen { background: var(--pine); color: var(--on-pine); border-radius: 18px; padding: 18px 18px 14px; min-height: 84px; display: flex; flex-direction: column; justify-content: flex-end; gap: 4px; }
+.calc-screen.err { box-shadow: 0 0 0 2px var(--lamp) inset; }
+.calc-expr { font: 400 26px/1.2 var(--f-display); word-break: break-all; }
+.calc-expr .ph { opacity: .45; }
+.calc-prev { min-height: 18px; font-size: 14px; opacity: .75; }
+.calc-pad { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.calc-k { padding: 14px 0; border-radius: 14px; background: var(--tile); font-weight: 600; font-size: 16px; transition: background .15s, transform .1s; }
+.calc-k:hover { background: var(--hover); }
+.calc-k:active { transform: scale(.95); }
+.calc-k.op { background: var(--matcha-soft); }
+.calc-k.eq { background: var(--matcha-strong); color: var(--on-matcha); grid-row: span 1; }
+.calc-k.del { background: var(--lamp-soft); }
+.calc-hist { border-top: 1px solid var(--line); padding-top: 10px; }
+.calc-hist ul { list-style: none; margin: 0; padding: 0; max-height: 140px; overflow-y: auto; }
+.calc-hist li { display: flex; justify-content: space-between; gap: 10px; padding: 6px 4px; border-radius: 10px; cursor: pointer; color: var(--ink-soft); font-size: 13.5px; }
+.calc-hist li:hover { background: var(--hover); color: var(--ink); }
+.calc-hist li b { color: var(--ink); font-weight: 600; }
+.sub-h { font-size: 13px; color: var(--ink-soft); font-weight: 600; margin: 0 0 6px; }
+
+
+/* small modifiers used by the Notes/Habits search + filter bars and the Tools section */
+.inp.sm { padding: 7px 12px; font-size: 13px; border-radius: 12px }
+.chip.sm { padding: 6px 11px; font-size: 12.5px }
+.chip[aria-pressed="true"] { background: var(--matcha-strong); color: var(--on-matcha) }

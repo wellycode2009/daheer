@@ -1,0 +1,68 @@
+/* Desk time card, the time zone picker and the plant sway.
+   Motion follows the same rules as the rest of the app: critically damped (no overshoot), and quieter when the system asks for less motion or transparency. */
+
+/* ---- time card ---- */
+.c-clock { background: linear-gradient(158deg, color-mix(in srgb, var(--lamp) 36%, var(--paper)) 0%, color-mix(in srgb, var(--lamp) 9%, var(--paper)) 100%); }
+.clockcard { position: relative; overflow: hidden; }
+.ck-zone { max-width: 66%; gap: 6px; }
+.ck-zone .i { width: 15px; height: 15px; flex: none; }
+.ck-zone span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ck-time {
+  display: flex; align-items: flex-end; gap: .22em; margin: 10px 0 4px; color: var(--ink);
+  font-family: "Flowers Kingdom", var(--f-display, Georgia, serif); font-size: clamp(36px, 3.5vw, 46px); line-height: normal; letter-spacing: -.02em;
+}
+.ck-digits { display: inline-flex; align-items: flex-end; }
+.ck-d { display: inline-block; width: .8em; text-align: center; font-variant-numeric: tabular-nums; }  /* fixed slots: the digits never shift when they change */
+.ck-colon { display: inline-flex; flex-direction: column; justify-content: center; align-self: center; gap: .5em; width: .36em; align-items: center; padding-bottom: .1em; }
+.ck-colon i { width: .21em; height: .21em; border-radius: 50%; background: currentColor; opacity: .85; }
+.ck-ap { font: 700 15px/1 var(--f-ui, system-ui, sans-serif); letter-spacing: .06em; color: var(--ink-soft); padding-bottom: .5em; }
+.ck-date { margin: 6px 0 0; font-weight: 650; letter-spacing: -.005em; }
+.ck-meta { display: flex; justify-content: space-between; gap: 10px; margin-top: 4px; font-size: .84rem; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+.ck-track { height: 6px; margin-top: 9px; border-radius: 6px; background: color-mix(in srgb, var(--ink) 10%, transparent); overflow: hidden; }
+.ck-track i { display: block; height: 100%; border-radius: 6px; background: linear-gradient(90deg, var(--lamp), var(--pine)); transition: width .9s cubic-bezier(.22, 1, .36, 1); }
+.ck-panel { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line); display: grid; gap: 12px; }
+.ck-panel[hidden] { display: none; }
+.ck-fmt { justify-self: start; }
+
+/* ---- time zone picker (like the "where are you?" step of a Linux installer) ---- */
+.tzpick { position: relative; display: grid; gap: 8px; min-width: 0; }
+.tz-field { position: relative; display: flex; align-items: center; }
+.tz-ic { position: absolute; inset-inline-start: 12px; display: grid; opacity: .6; pointer-events: none; }
+.tz-ic .i { width: 18px; height: 18px; }
+.tz-input { width: 100%; padding-inline-start: 38px; padding-inline-end: 118px; text-overflow: ellipsis; }
+.tz-now { position: absolute; inset-inline-end: 12px; font-size: 12px; color: var(--ink-soft); font-variant-numeric: tabular-nums; pointer-events: none; white-space: nowrap; }
+.tz-list {
+  list-style: none; margin: 0; padding: 6px; max-height: 248px; overflow: auto; border-radius: 16px; transform-origin: 50% 0;
+  background: color-mix(in srgb, var(--paper) 84%, transparent); -webkit-backdrop-filter: blur(18px) saturate(160%); backdrop-filter: blur(18px) saturate(160%);
+  border: 1px solid var(--line); border-top-color: rgba(255, 255, 255, .5); box-shadow: 0 14px 32px rgba(20, 40, 28, .16);
+  animation: tzIn .28s cubic-bezier(.22, 1, .36, 1);   /* materialises: scale + blur + fade together */
+}
+.tz-list[hidden] { display: none; }
+.tz-list li { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 9px 12px; border-radius: 11px; cursor: pointer; transition: background .12s, transform .12s; }
+.tz-list li.on { background: color-mix(in srgb, var(--pine) 15%, transparent); }
+.tz-list li:active { transform: scale(.985); }
+.tz-list li[aria-selected="true"] b::after { content: "\2713"; margin-inline-start: 7px; color: var(--pine); }
+.tz-main { display: grid; min-width: 0; }
+.tz-main b { font-weight: 650; }
+.tz-main small, .tz-time small { color: var(--ink-soft); font-weight: 500; }
+.tz-time { display: grid; justify-items: end; font-weight: 650; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.tz-none { padding: 14px 12px; color: var(--ink-soft); cursor: default; }
+.tz-detect { justify-self: start; border: 0; background: none; color: var(--pine); font: 600 .85rem var(--f-ui, system-ui, sans-serif); cursor: pointer; padding: 4px 2px; text-align: start; }
+.tz-detect:hover { text-decoration: underline; }
+.tz-fmt { display: grid; gap: 6px; margin-top: 12px; font-size: .9rem; }
+@keyframes tzIn { from { opacity: 0; transform: scale(.97) translateY(-4px); filter: blur(5px); } to { opacity: 1; transform: none; filter: none; } }
+@keyframes tzFade { from { opacity: 0; } to { opacity: 1; } }
+
+/* ---- the plant sways very gently (about 0.15 Hz, so it never reads as a loop) ---- */
+.z-sway { transform-origin: 0 0; animation: zSway 7s ease-in-out infinite; }
+.z-leaf { transform-origin: 0 0; animation: zLeaf 6s ease-in-out infinite; }
+@keyframes zSway { 0%, 100% { transform: rotate(-.9deg); } 50% { transform: rotate(1deg); } }
+@keyframes zLeaf { 0%, 100% { transform: rotate(-1.5deg); } 50% { transform: rotate(1.7deg); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .z-sway, .z-leaf { animation: none; }
+  .tz-list { animation: tzFade .15s ease; }
+  .ck-track i, .tz-list li { transition: none; }
+}
+@media (prefers-reduced-transparency: reduce) { .tz-list { background: var(--paper); -webkit-backdrop-filter: none; backdrop-filter: none; } }
+@media (prefers-contrast: more) { .tz-list { background: var(--paper); border-color: var(--ink); } .ck-meta, .ck-ap { color: var(--ink); } }
