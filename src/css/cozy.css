@@ -98,6 +98,7 @@
   transition: transform .22s ease, color .22s ease, background .22s ease;
 }
 
+
 .nav button:hover .i,
 .tog:hover .i { transform: translateY(-1px); }
 

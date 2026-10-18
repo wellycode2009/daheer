@@ -8,15 +8,15 @@
 .ck-zone .i { width: 15px; height: 15px; flex: none; }
 .ck-zone span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .ck-time {
-  display: flex; align-items: flex-end; gap: .22em; margin: 10px 0 4px; color: var(--ink);
-  font-family: "Flowers Kingdom", var(--f-display, Georgia, serif); font-size: clamp(36px, 3.5vw, 46px); line-height: normal; letter-spacing: -.02em;
+  display: flex; align-items: flex-end; gap: .12em; margin: 10px 0 4px; color: var(--ink);
+  font-family: "Varicka SC", var(--f-display, Georgia, serif); font-size: clamp(80px, 7.2vw, 104px); line-height: .95; letter-spacing: 0;
 }
 .ck-digits { display: inline-flex; align-items: flex-end; }
-.ck-d { display: inline-block; width: .8em; text-align: center; font-variant-numeric: tabular-nums; }  /* fixed slots: the digits never shift when they change */
-.ck-colon { display: inline-flex; flex-direction: column; justify-content: center; align-self: center; gap: .5em; width: .36em; align-items: center; padding-bottom: .1em; }
-.ck-colon i { width: .21em; height: .21em; border-radius: 50%; background: currentColor; opacity: .85; }
+.ck-d { display: inline-block; width: .4em; text-align: center; font-variant-numeric: tabular-nums; }  /* fixed slots: the digits never shift when they change */
+.ck-colon { display: inline-flex; flex-direction: column; justify-content: center; align-self: center; width: .24em; }
+.ck-colon::before { content: ":"; font: inherit; line-height: 1; -webkit-text-stroke: .025em currentColor; }
 .ck-ap { font: 700 15px/1 var(--f-ui, system-ui, sans-serif); letter-spacing: .06em; color: var(--ink-soft); padding-bottom: .5em; }
-.ck-date { margin: 6px 0 0; font-weight: 650; letter-spacing: -.005em; }
+.ck-date { margin: 6px 0 0; font-family: Northampton, var(--f-ui, system-ui, sans-serif); font-size: 1.3rem; font-weight: 400; letter-spacing: .01em; }
 .ck-meta { display: flex; justify-content: space-between; gap: 10px; margin-top: 4px; font-size: .84rem; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
 .ck-track { height: 6px; margin-top: 9px; border-radius: 6px; background: color-mix(in srgb, var(--ink) 10%, transparent); overflow: hidden; }
 .ck-track i { display: block; height: 100%; border-radius: 6px; background: linear-gradient(90deg, var(--lamp), var(--pine)); transition: width .9s cubic-bezier(.22, 1, .36, 1); }

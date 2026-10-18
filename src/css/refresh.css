@@ -1,0 +1,270 @@
+/* Desk refresh, loaded last.
+   Motion follows the Apple design rules in this project's notes:
+   - press feedback starts on pointer-down, not on release;
+   - springs and eases start from the current value and never overshoot by default;
+   - reduced motion, reduced transparency and more contrast each get their own treatment.
+   Type: user-written titles use Judges (public domain); the clock uses Varicka SC (see clock.css). */
+
+:root {
+  /* critically damped: fast start, long soft settle, no overshoot */
+  --ease-settle: cubic-bezier(.22, 1, .36, 1);
+  --press: 90ms;
+}
+
+/* ---- type: the user's own words get the notebook serif ---- */
+.note h3,
+h3[data-ws] {
+  font-family: Judges, var(--f-display, Georgia, serif);
+  font-size: 22px;
+  line-height: 1.15;
+  letter-spacing: 0;
+}
+
+/* ---- press feedback: instant on pointer-down ---- */
+.btn:active,
+.tog:active,
+.chip:active,
+.capture:active,
+.ib:active {
+  transform: scale(.97);
+  transition-duration: var(--press);
+}
+
+.card[role="link"]:active {
+  transform: scale(.985);
+  transition-duration: var(--press);
+}
+
+/* ---- settle: cards and controls return with the critically damped curve ---- */
+.card,
+.card[role="link"],
+.btn,
+.tog,
+.chip,
+.capture {
+  transition:
+    transform .38s var(--ease-settle),
+    box-shadow .38s var(--ease-settle),
+    border-color .38s var(--ease-settle),
+    background-color .38s var(--ease-settle),
+    color .38s var(--ease-settle);
+}
+
+/* ---- the capture bar keeps its material; it reads as a floating layer over the board ---- */
+.capture {
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  backdrop-filter: blur(16px) saturate(140%);
+}
+
+/* ---- material: the page has light in it, so the sidebar can be real frosted glass ---- */
+body {
+  background:
+    radial-gradient(900px 620px at 92% -8%, color-mix(in srgb, var(--lamp) 26%, transparent), transparent 62%),
+    radial-gradient(820px 560px at -6% 108%, color-mix(in srgb, var(--matcha-strong) 20%, transparent), transparent 64%),
+    var(--bg);
+}
+.app, .app > .main { background: transparent; }
+.app > .side {
+  background: color-mix(in srgb, var(--paper) 52%, transparent);
+  -webkit-backdrop-filter: blur(26px) saturate(170%);
+  backdrop-filter: blur(26px) saturate(170%);
+  border-inline-end: 1px solid color-mix(in srgb, var(--line) 60%, transparent);
+  box-shadow: inset -1px 0 0 rgba(255, 255, 255, .25);
+}
+:root[data-theme="dark"] .app > .side {
+  background: color-mix(in srgb, var(--paper) 58%, transparent);
+  box-shadow: inset -1px 0 0 rgba(255, 255, 255, .04);
+}
+@media (prefers-reduced-transparency: reduce) {
+  .app > .side { background: var(--paper); -webkit-backdrop-filter: none; backdrop-filter: none; }
+}
+
+/* ---- headline: optical tracking, tighter as it grows ---- */
+.head h1 {
+  font-size: clamp(38px, 4.4vw, 54px);
+  line-height: 1.02;
+  letter-spacing: -.035em;
+}
+.head .sub { font-size: 15.5px; color: var(--ink-soft); }
+
+/* ---- depth: cards lift toward the finger and cast a deeper shadow ---- */
+.board .card {
+  transition:
+    transform .42s var(--ease-settle),
+    box-shadow .42s var(--ease-settle),
+    border-color .42s var(--ease-settle),
+    background-color .42s var(--ease-settle);
+}
+.board .card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 22px 44px -18px rgba(12, 27, 19, .28), 0 2px 6px rgba(12, 27, 19, .06);
+}
+.board .card[role="link"]:hover { transform: translateY(-3px); }
+
+/* ---- press: every control answers on pointer-down ---- */
+.nav button:active {
+  transform: scale(.97);
+  transition-duration: var(--press);
+}
+.btn-warm:active { box-shadow: inset 0 2px 6px rgba(0, 0, 0, .18); }
+
+/* ---- the capture bar is a glass layer over the board ---- */
+.capture {
+  border: 1px solid color-mix(in srgb, var(--paper) 60%, var(--line));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .55), 0 12px 30px -12px rgba(12, 27, 19, .22);
+}
+:root[data-theme="dark"] .capture {
+  border-color: rgba(255, 255, 255, .08);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .07), 0 12px 30px -12px rgba(0, 0, 0, .5);
+}
+
+/* ---- toggle thumb: a spring with damping near 1, so it settles without bouncing ---- */
+.tog .sw, .tog .sw::after { transition: transform .4s var(--ease-settle), background-color .3s ease; }
+
+/* ---- focus visible: a clear ring, not the browser default ---- */
+:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--matcha-strong) 70%, transparent);
+  outline-offset: 3px;
+}
+
+/* ---- entrance: cards rise in once, staggered ---- */
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes rise {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: none; }
+}
+.board.enter .card { animation: rise .62s var(--ease-settle) both; }
+.board.enter .col:nth-child(2) .card { animation-delay: 80ms; }
+.board.enter .col:nth-child(3) .card { animation-delay: 160ms; }
+.board.enter .card:nth-child(2) { animation-delay: 140ms; }
+.board.enter .card:nth-child(3) { animation-delay: 220ms; }
+.board.enter .card:nth-child(n+4) { animation-delay: 300ms; }
+
+/* ---- accessibility ---- */
+@media (prefers-reduced-motion: reduce) {
+  .board.enter .card { animation: fadeIn .3s ease both !important; }
+  .board .card:hover { transform: none; }
+  .nav button:active { transform: none; }
+  .card,
+  .card[role="link"],
+  .btn,
+  .tog,
+  .chip,
+  .capture,
+  .ck-track i {
+    transition: opacity .2s ease, border-color .2s ease !important;
+    transform: none !important;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .capture {
+    background: var(--paper);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+@media (prefers-contrast: more) {
+  .card {
+    border-color: var(--ink-soft);
+  }
+}
+
+/* ---- BG sounds: icons only, round and calm; your own sounds sit next to them ---- */
+.chips.icons { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.icon-chip {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  display: inline-grid;
+  place-items: center;
+  border-radius: 16px;
+}
+.icon-chip .i { width: 20px; height: 20px; }
+.icon-chip.add { border-style: dashed; }
+.chip-own { display: inline-flex; align-items: center; gap: 2px; }
+.chip-own .ib { width: 22px; height: 22px; }
+
+/* ---- sidebar tools: settings and customise, bottom left ---- */
+.side-tools { display: flex; gap: 6px; padding: 6px 4px 0; }
+.side-tools .ib {
+  width: 40px;
+  height: 40px;
+  border-radius: 13px;
+  color: var(--ink-soft);
+  transition: background-color .3s var(--ease-settle), color .3s var(--ease-settle), transform .3s var(--ease-settle);
+}
+.side-tools .ib .i { width: 19px; height: 19px; }
+
+/* ---- customise dialog ---- */
+.cust-list { display: grid; gap: 6px; margin: 14px 0; }
+.cust-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 11px 14px;
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--paper) 62%, transparent);
+  cursor: pointer;
+}
+.cust-row input { width: 18px; height: 18px; accent-color: var(--matcha-strong); }
+
+.dlg.cust .dlg-b { max-height: 58vh; overflow-y: auto; }
+.dlg.cust .cust-row { padding: 9px 14px; }
+
+/* ---- About artwork: show the whole picture at its own proportions (it was cropped before) ---- */
+.about-art { min-height: 0; align-self: start; }
+.about-art img { height: auto; min-height: 0; object-fit: contain; }
+@media (max-width: 640px) { .about-art, .about-art img { min-height: 0; } }
+
+/* ---- decorations removed: the little sparkle on every card ---- */
+.card::after { content: none; display: none; }
+
+/* ---- the cup in the rain window: a slow breath, and steam that rises from it ---- */
+@keyframes cupBob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-1.1px); } }
+.art svg .cup-art { transform-box: fill-box; transform-origin: 50% 100%; animation: cupBob 4.6s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) { .art svg .cup-art { animation: none; } }
+
+/* ---- screen time: the last seven days, today highlighted ---- */
+.sbars { display: flex; align-items: flex-end; gap: 8px; height: 96px; margin: 14px 0 8px; }
+.sbar { flex: 1; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 6px; min-width: 0; }
+.sbar i {
+  display: block;
+  width: 100%;
+  max-width: 26px;
+  min-height: 6px;
+  border-radius: 9px;
+  background: color-mix(in srgb, var(--matcha-strong) 55%, transparent);
+  transition: height .6s var(--ease-settle);
+}
+.sbar.now i { background: var(--lamp); }
+.sbar span { font-size: 11px; color: var(--ink-soft); }
+
+/* ---- streak ---- */
+.streak-row { display: flex; align-items: center; gap: 12px; margin: 10px 0 6px; }
+.streak .flame {
+  width: 46px;
+  height: 46px;
+  border-radius: 15px;
+  display: grid;
+  place-items: center;
+  color: var(--lamp);
+  background: color-mix(in srgb, var(--lamp) 18%, transparent);
+  flex: none;
+}
+.streak .flame .i { width: 22px; height: 22px; }
+.streak b { font-family: var(--f-display); font-weight: 400; font-size: 22px; letter-spacing: -.01em; }
+.streak small { display: block; }
+
+/* ---- desk: three columns. The clock sits in the middle column, the focus window at the top left. ---- */
+.board { column-count: auto; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 16px; align-items: start; }
+.board .col { min-width: 0; }
+@media (max-width: 1180px) {
+  .board { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .board .col:nth-child(3) { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 16px; align-items: start; }
+}
+@media (max-width: 640px) {
+  .board { grid-template-columns: 1fr; }
+  .board .col:nth-child(3) { display: block; }
+}

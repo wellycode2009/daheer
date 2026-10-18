@@ -59,8 +59,14 @@ html[data-text-dir="rtl"] select:not([dir="ltr"]) {
   text-align: start;
 }
 
-/* Flowers Kingdom (Imagex, 2016) - used only for the desk clock. Its licence is "free for personal use only" (see ASSET-LICENSES.md).
-   Its glyphs are about 1.9 em tall, so the vertical metrics are overridden to give the clock a sensible line box. */
-@font-face { font-family: "Flowers Kingdom"; font-style: normal; font-weight: 400; font-display: swap;
-  src: url("../assets/fonts/latin/FlowersKingdom.ttf") format("truetype");
-  ascent-override: 190%; descent-override: 6%; line-gap-override: 0%; }
+/* Northampton (pyrs, 2013) - public domain (see ASSET-LICENSES.md). Used for the desk clock only;
+   the clock falls back to the UI fonts if the file is removed. */
+@font-face { font-family: Northampton; font-style: normal; font-weight: 400; font-display: swap;
+  src: url("../assets/fonts/latin/Northampton.ttf") format("truetype"); }
+
+/* Varicka SC (Character, 2010) and Judges (public domain). Varicka: desk clock and Tools clock.
+   Judges: user-written note and workspace titles. */
+@font-face { font-family: "Varicka SC"; font-style: normal; font-weight: 400; font-display: swap;
+  src: url("../assets/fonts/latin/VarickaSC.ttf") format("truetype"); }
+@font-face { font-family: Judges; font-style: normal; font-weight: 400; font-display: swap;
+  src: url("../assets/fonts/latin/Judges.ttf") format("truetype"); }

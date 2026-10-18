@@ -186,6 +186,38 @@
         });
         D.ui.dialog({ title: t('set.title'), html: body, actions: [{ label: t('common.close'), kind: 'warm', value: true }] });
     }
+    /* ---------- customise: choose which desk cards you see ---------- */
+    function openCustomise() {
+        var CARDS = [['time', 'd.time'], ['focus', 'cust.focus'], ['sticky', 'cust.sticky'], ['mood', 'mood.title'], ['screen', 'st.title'], ['streak', 'sk.title'], ['growth', 'd.growth'], ['heat', 'd.heat'], ['coll', 'd.ws'], ['amb', 'd.amb']];
+        var hid = D.store.S.settings.hiddenCards || [];
+        var body = '<p class="dlg-p">' + esc(t('cust.sub')) + '</p><div class="cust-list">' + CARDS.map(function (c) {
+            return '<label class="cust-row"><span>' + esc(t(c[1])) + '</span><input type="checkbox" data-card-on="' + c[0] + '"' + (hid.indexOf(c[0]) < 0 ? ' checked' : '') + '></label>';
+        }).join('') + '</div><button class="btn btn-ghost sm" data-card-reset>' + esc(t('cust.reset')) + '</button>';
+        D.ui.dialog({
+            title: t('cust.title'), cls: 'cust', html: body, actions: [{ label: t('common.close'), kind: 'warm', value: true }],
+            onOpen: function (box) {
+                box.addEventListener('change', function (e) {
+                    var k = e.target.dataset && e.target.dataset.cardOn;
+                    if (!k)
+                        return;
+                    var on = e.target.checked;
+                    D.store.mutate(function (S) {
+                        var h = S.settings.hiddenCards = S.settings.hiddenCards || [], i = h.indexOf(k);
+                        if (on && i >= 0) h.splice(i, 1);
+                        if (!on && i < 0) h.push(k);
+                    });
+                    D.refresh();
+                });
+                box.addEventListener('click', function (e) {
+                    if (!e.target.closest('[data-card-reset]'))
+                        return;
+                    D.store.mutate(function (S) { S.settings.hiddenCards = []; });
+                    D.refresh();
+                    box.querySelectorAll('[data-card-on]').forEach(function (i) { i.checked = true; });
+                });
+            }
+        });
+    }
     /* ---------- command palette ---------- */
     function openPalette(anchor) {
         var items = [
@@ -238,6 +270,8 @@
                 return D.openLanguagePicker(e.target.closest('#langBtn'));
             if (e.target.closest('#settingsBtn'))
                 return openSettings();
+            if (e.target.closest('#customiseBtn'))
+                return openCustomise();
             var pal = e.target.closest('[data-palette]');
             if (pal)
                 return openPalette(pal);
@@ -245,7 +279,7 @@
         document.addEventListener('keydown', function (e) {
             if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
                 e.preventDefault();
-                openPalette($('[data-palette]'));
+                openPalette($('[data-palette]') || $('.head') || document.body);
             }
         });
         D.on('change', function (meta) {

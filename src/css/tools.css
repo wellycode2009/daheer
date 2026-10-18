@@ -81,7 +81,7 @@ button.cal-cell:hover { background: var(--tile) }
 /* ---- clock / stopwatch / timer ---- */
 .clock-tabs { margin-bottom: 14px }
 .clock-face { display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center; padding: 32px 20px }
-.clock-time { font: 400 52px/1 var(--f-display); font-variant-numeric: tabular-nums }
+.clock-time { font: 400 64px/1 "Varicka SC", var(--f-display); font-variant-numeric: tabular-nums }
 .clock-date { color: var(--ink-soft) }
 .clock-actions { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center }
 .clock-face .bar.thick { width: 100%; max-width: 320px }
@@ -99,5 +99,5 @@ button.cal-cell:hover { background: var(--tile) }
 }
 @media (max-width: 560px) {
   .tools-grid { grid-template-columns: 1fr }
-  .clock-time { font-size: 40px }
+  .clock-time { font-size: 52px }
 }
