@@ -12,9 +12,9 @@
         var preferred = (navigator.language || 'en').slice(0, 2), lang = /^(en|ar|fr|es|zh|ja|ko)$/.test(preferred) ? preferred : 'en';
         return {
             v: 3,
-            settings: { lang: lang, digits: lang === 'ar' ? 'arab' : 'latn', theme: 'auto', weekStart: 1, rule: 'one', sfx: true, celebrate: true, xpGoal: 40, focus: { focus: 25, short: 5, long: 15 }, goalMin: 120, sound: 'off', vol: 60, name: '', tz: '', clockFormat: 'auto' },
+            settings: { hiddenCards: [], customSounds: [], lang: lang, digits: lang === 'ar' ? 'arab' : 'latn', theme: 'auto', weekStart: 1, rule: 'one', sfx: true, celebrate: true, xpGoal: 40, focus: { focus: 25, short: 5, long: 15 }, goalMin: 120, sound: 'off', vol: 60, name: '', tz: '', clockFormat: 'auto' },
             meta: { workspace: '', sticky: '', onboarded: false, celebrated: {}, focusPage: null, lastPage: null, clock: 'ring', created: '' },
-            habits: [], logs: {}, rest: {}, mood: {}, writeDays: {}, sessions: [], notes: [], board: { items: [] }, events: [],
+            habits: [], logs: {}, rest: {}, mood: {}, screen: {}, writeDays: {}, sessions: [], notes: [], board: { items: [] }, events: [],
             adventure: { rolls: 0, last: null, history: [], badHoursPerDay: null, plan: null }, achievements: {},
             tools: { stickies: [], mp4Url: '', mp4History: [], mp3Volume: 0.8, timerMinutes: 5 }
         };
