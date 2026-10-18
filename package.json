@@ -1,0 +1,46 @@
+{
+  "name": "daheer",
+  "productName": "Daheer",
+  "version": "1.0.0",
+  "description": "Notes, habits and focus in one cozy place",
+  "main": "electron/main.js",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder",
+    "test": "node test/habitmath.test.js && node test/featuremath.test.js && node test/timezone.test.js",
+    "check:i18n": "node tools/check-i18n.js",
+    "prepare:app": "node -e \"console.log(\\\"Daheer data schema v3 ready; Arabic fonts are installed privately at build time.\\\")\"",
+    "prepare:arabic": "node tools/install-thmanyah.js",
+    "test:e2e": "node test/board.e2e.js && node test/board.features.e2e.js && node test/clock.e2e.js"
+  },
+  "devDependencies": {
+    "electron": "^33.0.0",
+    "electron-builder": "^25.0.0"
+  },
+  "build": {
+    "appId": "app.daheer.desktop",
+    "productName": "Daheer",
+    "files": [
+      "electron/**/*.js",
+      "src/**",
+      "!src/**/*.map",
+      "!src/assets/fonts/ar/README.md"
+    ],
+    "directories": {
+      "output": "dist"
+    },
+    "linux": {
+      "target": [
+        {
+          "target": "deb",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "category": "Office",
+      "icon": "src/assets/logo/daheer-icon-dark.png"
+    }
+  }
+}
