@@ -70,9 +70,9 @@
             '<path d="M118 357v6M160 357v6M120 346v5M158 346v5M118 336v4M162 336v4" style="stroke:#fff" stroke-width="1.3" opacity=".35" stroke-linecap="round"/>' +
             '<circle class="z-pulse" cx="141" cy="318" r="22" style="fill:url(#cg-' + A + ')"/><rect x="136.5" y="318" width="9" height="15" rx="2" style="fill:var(--mug)"/><path d="M141 318v-3" style="stroke:var(--frame)" stroke-width="1.2"/>' +
             '<g class="z-flame"><ellipse cx="141" cy="311" rx="3.3" ry="6" style="fill:var(--lamp)"/><ellipse cx="141" cy="312.5" rx="1.5" ry="3.2" style="fill:#fff" opacity=".85"/></g></g>' +
-            /* mug and saucer */
-            '<ellipse cx="256" cy="367" rx="22" ry="4" style="fill:var(--pot)"/><rect x="239" y="338" width="34" height="28" rx="8" style="fill:var(--mug)"/><path d="M273 346h5a7 7 0 0 1 0 14h-5" fill="none" style="stroke:var(--mug)" stroke-width="5"/>' +
-            '<path d="M241 350H271" style="stroke:var(--leaf)" stroke-width="3" opacity=".5"/><ellipse cx="256" cy="339" rx="15" ry="3.4" style="fill:var(--tea)"/>' +
+            /* the cup on the sill: your coffee-cup artwork (its own steam is drawn in the picture) */
+            '<ellipse cx="256" cy="367" rx="22" ry="4" style="fill:var(--pot)"/>' +
+            '<image class="cup-art" href="assets/vectors/coffee-cup.png" x="233" y="321" width="46" height="47.4" preserveAspectRatio="xMidYMax meet"/>' +
             '<path class="steam" d="M249 330c-6-8 6-12 0-22"/><path class="steam" style="animation-delay:-1.1s" d="M257 330c-6-8 6-12 0-22"/><path class="steam" style="animation-delay:-2.1s" d="M265 330c-6-8 6-12 0-22"/></svg>';
     };
     /* ---------- helpers ---------- */
@@ -98,7 +98,7 @@
     var clockTimer = null;
     function digitsHTML(hour, min) {
         return (hour + ':' + min).split('').map(function (ch) {
-            return ch === ':' ? '<span class="ck-colon" aria-hidden="true"><i></i><i></i></span>' : '<span class="ck-d">' + ch + '</span>';
+            return ch === ':' ? '<span class="ck-colon" aria-hidden="true"></span>' : '<span class="ck-d">' + ch + '</span>';
         }).join('');
     }
     function clockCardHTML() {
@@ -174,23 +174,18 @@
             var due = D.notes.nextDue(), date = D.fmtDate(D.now(), { weekday: 'long', month: 'long', day: 'numeric' });
             var sub = due ? t('d.sub.due', { date: date, left: left, what: due.label, when: D.relDay(due.date) }) : t('d.sub', { date: date, left: left });
             var hr = D.now().getHours(), nudge = '';
+            var enter = !D.desk._entered; D.desk._entered = true; // cards rise in once, not on every change
             if (c.chain.atRisk && hr >= 17)
                 nudge = '<div class="nudge">' + icon('flame', 'i-fill') + '<span>' + esc(t('d.nudge', { n: c.chain.cur })) + '</span></div>';
-            // linked page + tonight tasks
-            var pg = D.notes.focusPage(), todos = pg ? D.notes.todosOf(pg) : [], doneN = todos.filter(function (x) { return x.done; }).length;
-            var tasks = todos.slice(0, 6).map(function (x) { return '<label class="chk"><input type="checkbox" data-task="' + esc(pg.id) + ':' + esc(x.id) + '"' + (x.done ? ' checked' : '') + '><span>' + esc(x.text) + '</span></label>'; }).join('');
-            var tonight = '<article class="card c-paper"><div class="card-head"><h3>' + esc(t('d.tonight')) + '</h3><span class="meta">' + (todos.length ? esc(t('d.tcount', { a: doneN, b: todos.length })) : '') + '</span></div>' +
-                (tasks || '<p class="meta">' + esc(t('d.tonight.empty')) + '</p>') + '<input class="quick" data-quick placeholder="' + esc(t('d.quick')) + '" aria-label="' + esc(t('d.quick')) + '">' + (pg && todos.length ? '<p class="meta from">' + esc(t('d.from', { page: pg.title || t('n.untitled') })) + '</p>' : '') + '</article>';
+            // linked page (drives the focus card)
+            var pg = D.notes.focusPage();
             var focusMin = S.settings.focus.focus, lastPage = pg;
             var focusCard = '<article class="card c-pine card-focus"><div class="art" data-scene>' + D.scene('d', xp.stage) + '</div><h3>' + esc(t('d.focus', { n: focusMin })) + '</h3><p class="meta">' + esc(lastPage ? t('d.linked', { page: lastPage.title || t('n.untitled') }) : t('d.unlinked')) + '</p><button class="btn btn-warm" data-go="focus" data-start="1">' + icon('play', 'i-fill') + esc(t('d.start')) + '</button></article>';
             var sticky = '<article class="card c-lamp sticky"><span class="tape"></span><p class="hand" contenteditable="plaintext-only" spellcheck="false" data-sticky data-ph="' + esc(t('d.sticky.ph')) + '" dir="auto">' + esc(S.meta.sticky) + '</p></article>';
-            var habitsCard = '<article class="card"><div class="card-head"><h3>' + esc(t('d.habits')) + '</h3><span class="meta">' + (hasH ? esc(t('d.hcount', { a: s.done, b: s.total })) : '') + '</span></div>' +
-                (hasH ? '<div data-hlist>' + D.habits.listHTML(false) + '</div>' : '<p class="meta">' + esc(t('d.habits.empty')) + '</p>' + D.habits.suggestHTML() + '<button class="btn btn-ghost sm" data-hb="new">' + icon('plus') + esc(t('hb.new')) + '</button>') + '</article>';
             var moodCard = '<article class="card c-mist"><div class="card-head"><h3>' + esc(t('mood.title')) + '</h3></div><div data-moodcard>' + D.mood.cardHTML() + '</div></article>';
             var last = D.notes.latest(), noteCard = last ?
                 '<article class="card c-paper note" data-open-page="' + esc(last.id) + '" role="link" tabindex="0"><h3>' + esc(last.title || t('n.untitled')) + '</h3><p>' + esc(D.notes.excerpt(last, 170)) + '</p>' + (last.tags.length ? '<div class="tags">' + last.tags.slice(0, 3).map(function (x) { return '<span class="tag">' + esc(x) + '</span>'; }).join('') + '</div>' : '') + '<p class="meta">' + esc(t('n.edited', { when: D.ago(last.edited) })) + '</p></article>' :
                 '<article class="card c-paper note" data-go="notes" role="link" tabindex="0"><h3>' + esc(t('d.note.empty.t')) + '</h3><p>' + esc(t('d.note.empty.p')) + '</p><p class="meta">' + esc(t('d.note.empty.cta')) + '</p></article>';
-            var pin1 = '<figure class="card c-matcha pin"><svg class="pinart" aria-hidden="true"><use href="#pic-matcha"/></svg><figcaption contenteditable="plaintext-only" spellcheck="false" data-cap="matcha" dir="auto">' + esc(caption('matcha', 'd.cap1')) + '</figcaption></figure>';
             var wk = c.week, qs = c.quests || [], qd = qs.filter(function (q) { return q.done; }).length;
             var growth = '<article class="card c-paper growmini" data-go="habits" data-tab="rewards" role="link" tabindex="0"><div class="card-head"><h3>' + esc(t('d.growth')) + '</h3><span class="meta">' + esc(t('hb.lvl', { n: xp.level })) + '</span></div>' +
                 '<div class="gm-row"><div class="gm-plant">' + D.plantSVG(xp.stage) + '</div><div class="gm-tx"><b>' + esc(t('lv.' + xp.stage)) + '</b><div class="bar"><i style="width:' + Math.round(xp.pct * 100) + '%"></i></div><small class="meta">' + esc(t('rw.toNext', { n: xp.toNext, l: xp.level + 1 })) + '</small></div></div>' +
@@ -214,12 +209,24 @@
                     cells += '<i class="l' + lv + '" title="' + esc(D.fmtDate(HM.key(d), { weekday: 'short', month: 'short', day: 'numeric' }) + (day ? ' · ' + t('hm.n', { n: day.done }) : '')) + '"></i>';
                 }
             var heat = '<article class="card"><div class="card-head"><h3>' + esc(t('d.heat')) + '</h3></div><div class="heat" style="--w:12" role="img" aria-label="' + esc(t('d.heat')) + '">' + cells + '</div><p class="meta">' + esc(hasH ? t('d.heat.sum', { a: lit, b: 84 }) : t('d.heat.empty')) + '</p></article>';
-            var pin2 = '<figure class="card c-mist pin"><svg class="pinart" aria-hidden="true"><use href="#pic-books"/></svg><figcaption contenteditable="plaintext-only" spellcheck="false" data-cap="lib" dir="auto">' + esc(caption('lib', 'd.cap2')) + '</figcaption></figure>';
             var coll = '<article class="card c-paper"><div class="mosaic"><div class="m1"><svg aria-hidden="true"><use href="#pic-books"/></svg></div><div class="m2"><svg aria-hidden="true"><use href="#pic-matcha"/></svg></div><div class="m3"><svg aria-hidden="true"><use href="#pic-leaf"/></svg></div></div>' +
                 '<h3 contenteditable="plaintext-only" spellcheck="false" data-ws data-ph="' + esc(t('d.ws.ph')) + '" dir="auto">' + esc(S.meta.workspace || t('d.ws')) + '</h3><p class="meta">' + esc(t('d.coll', { a: S.notes.length, b: D.store.activeHabits().length })) + '</p></article>';
-            var amb = '<article class="card c-paper"><div class="card-head"><h3>' + esc(t('d.amb')) + '</h3></div><div class="chips">' + ['cafe', 'stream', 'brown', 'pad'].map(function (k) { return '<button class="chip" data-sound="' + k + '" aria-pressed="false">' + esc(t('snd.' + k)) + '</button>'; }).join('') + '</div><input type="range" min="0" max="100" value="' + S.settings.vol + '" data-vol aria-label="' + esc(t('snd.vol')) + '"></article>';
-            root.innerHTML = '<header class="head"><div><h1>' + esc(greeting()) + '</h1><p class="sub">' + esc(sub) + '</p></div><button class="capture" data-palette>' + icon('search') + '<span>' + esc(t('d.capture')) + '</span><kbd>Ctrl K</kbd></button></header>' + nudge +
-                '<div class="board">' + clockCardHTML() + focusCard + tonight + sticky + habitsCard + moodCard + noteCard + pin1 + growth + heat + pin2 + coll + amb + '</div>';
+            var fmtMin = function (sec) { var h = Math.floor(sec / 3600), m = Math.floor(sec % 3600 / 60); return h ? h + 'h ' + m + 'm' : m + 'm'; };
+            var scr = S.screen || {}, td = D.store.today(), week = [], peak = 60;
+            for (var k = 6; k >= 0; k--) { var dd = td - k, sec = scr[dd] || 0; week.push({ d: dd, sec: sec }); if (sec > peak) peak = sec; }
+            var bars = week.map(function (w) { var h = Math.max(6, Math.round(w.sec / peak * 100)); return '<div class="sbar' + (w.d === td ? ' now' : '') + '" title="' + esc(D.fmtDate(HM.key(w.d), { weekday: 'short' }) + ' - ' + fmtMin(w.sec)) + '"><i style="height:' + h + '%"></i><span>' + esc(D.fmtDate(HM.key(w.d), { weekday: 'narrow' })) + '</span></div>'; }).join('');
+            var screenCard = '<article class="card c-paper screen"><div class="card-head"><h3>' + esc(t('st.title')) + '</h3><span class="meta">' + esc(t('st.today', { t: fmtMin(scr[td] || 0) })) + '</span></div><div class="sbars" role="img" aria-label="' + esc(t('st.title')) + '">' + bars + '</div><p class="meta">' + esc(t('st.sub')) + '</p></article>';
+            var streakNote = c.chain.cur ? (c.chain.todayLit ? t('sk.good') : t('sk.keep')) : t('sk.empty');
+            var streakCard = '<article class="card c-paper streak"><div class="card-head"><h3>' + esc(t('sk.title')) + '</h3></div><div class="streak-row"><span class="flame">' + icon('flame', 'i-fill') + '</span><div><b>' + esc(t('sk.days', { n: c.chain.cur })) + '</b><small class="meta">' + esc(t('sk.best', { n: c.chain.best })) + '</small></div></div><p class="meta">' + esc(streakNote) + '</p></article>';
+            var amb = '<article class="card c-paper"><div class="card-head"><h3>' + esc(t('d.amb')) + '</h3></div>' + D.focus.ambienceHTML() + '<input type="range" min="0" max="100" value="' + S.settings.vol + '" data-vol aria-label="' + esc(t('snd.vol')) + '"></article>';
+                var cols = [
+                    [['focus', focusCard], ['screen', screenCard], ['growth', growth]],
+                    [['time', clockCardHTML()], ['sticky', sticky], ['mood', moodCard], ['streak', streakCard]],
+                    [['heat', heat], ['coll', coll], ['amb', amb]]
+                ];
+                var hid = S.settings.hiddenCards || [];
+                root.innerHTML = '<header class="head"><div><h1>' + esc(greeting()) + '</h1><p class="sub">' + esc(sub) + '</p></div></header>' + nudge +
+                    '<div class="board' + (enter ? ' enter' : '') + '">' + cols.map(function (col) { return '<div class="col">' + col.filter(function (c) { return hid.indexOf(c[0]) < 0; }).map(function (c) { return c[1]; }).join('') + '</div>'; }).join('') + '</div>';
             D.focus && D.focus.paintSound();
             tickClock(root);
         },
@@ -268,4 +275,13 @@
             });
         }
     };
+    setInterval(function () {
+        if (document.hidden || !D.store || !D.store.S)
+            return;
+        D.store.mutate(function (S) {
+            S.screen = S.screen || {};
+            var k = D.store.today();
+            S.screen[k] = (S.screen[k] || 0) + 30;
+        }, { silent: true });
+    }, 30000);
 })();

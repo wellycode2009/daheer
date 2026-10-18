@@ -134,7 +134,7 @@
             '<div class="lenrow"><button class="ib" data-f="dec" aria-label="−">−</button><b data-len></b><button class="ib" data-f="inc" aria-label="+">+</button></div>' +
             '<label class="fld linkpg"><span>' + esc(t('f.link')) + '</span><select class="inp" data-f="page"><option value="">' + esc(t('f.nopage')) + '</option>' + pages + '</select></label></article>' +
             '<div class="fgrid"><article class="card c-matcha"><div class="card-head"><h3>' + esc(t('f.today')) + '</h3><span class="meta">' + esc(D.dur(mins)) + ' / ' + esc(D.dur(goal)) + '</span></div><div class="bar thick"><i style="width:' + Math.round(D.clamp(mins / goal, 0, 1) * 100) + '%"></i></div><p class="meta" style="margin-top:8px">' + esc(t('f.xp')) + '</p></article>' +
-            '<article class="card c-paper"><div class="card-head"><h3>' + esc(t('d.amb')) + '</h3></div><div class="chips">' + ['cafe', 'stream', 'brown', 'pad'].map(function (k) { return '<button class="chip" data-sound="' + k + '" aria-pressed="false">' + esc(t('snd.' + k)) + '</button>'; }).join('') + '</div><input type="range" min="0" max="100" value="' + S.settings.vol + '" data-vol aria-label="' + esc(t('snd.vol')) + '"></article>' +
+            '<article class="card c-paper"><div class="card-head"><h3>' + esc(t('d.amb')) + '</h3></div>' + D.focus.ambienceHTML() + '<input type="range" min="0" max="100" value="' + S.settings.vol + '" data-vol aria-label="' + esc(t('snd.vol')) + '"></article>' +
             '<article class="card c-paper wide"><div class="card-head"><h3>' + esc(t('f.sessions')) + '</h3></div>' + hist + '</article></div></div></div>';
         paint(true);
         paintSound();
@@ -188,7 +188,162 @@
         }
         return b;
     }
+    var timers = [];
+    /* ---- helpers for the synthesized ambience (all generated in the browser; no audio files) ---- */
+    function src(c, type) { var s = c.createBufferSource(); s.buffer = noiseBuf(c, type); s.loop = true; nodes.push(s); return s; }
+    function filt(c, type, freq, q, gainV, dest) {
+        var f = c.createBiquadFilter(), g = c.createGain();
+        f.type = type; f.frequency.value = freq; f.Q.value = q; g.gain.value = gainV;
+        f.connect(g); g.connect(dest); nodes.push(f, g);
+        return { input: f, gain: g };
+    }
+    function wobble(c, rate, depth, param) { // slow swell on a gain, so the noise breathes
+        var o = c.createOscillator(), g = c.createGain();
+        o.frequency.value = rate; g.gain.value = depth;
+        o.connect(g); g.connect(param); o.start(); nodes.push(o, g);
+    }
+    function cafe(c) {
+        var room = src(c, 'brown'), r = filt(c, 'lowpass', 700, .5, .45, master);
+        room.connect(r.input); room.start();
+        var murmur = src(c, 'white'), m = filt(c, 'bandpass', 900, .7, .1, master);
+        murmur.connect(m.input); wobble(c, .25, .05, m.gain.gain); murmur.start();
+        var tick = function () { // a cup or a spoon now and then
+            if (sound !== 'cafe')
+                return;
+            var now = c.currentTime, o = c.createOscillator(), g = c.createGain();
+            o.type = 'sine'; o.frequency.value = 2200 + Math.random() * 1800;
+            g.gain.setValueAtTime(.0001, now);
+            g.gain.exponentialRampToValueAtTime(.05, now + .004);
+            g.gain.exponentialRampToValueAtTime(.0001, now + .12);
+            o.connect(g); g.connect(master); o.start(now); o.stop(now + .13);
+            timers.push(setTimeout(tick, 900 + Math.random() * 2600));
+        };
+        timers.push(setTimeout(tick, 400));
+    }
+    function stream(c) {
+        var rumble = src(c, 'brown'), r = filt(c, 'lowpass', 260, .6, .5, master);
+        rumble.connect(r.input); rumble.start();
+        var water = src(c, 'white'), w = filt(c, 'bandpass', 1400, .5, .12, master);
+        water.connect(w.input); wobble(c, .4, .05, w.gain.gain); water.start();
+        var fizz = src(c, 'white'), h = filt(c, 'highpass', 3200, .7, .025, master);
+        fizz.connect(h.input); wobble(c, .7, .012, h.gain.gain); fizz.start();
+    }
+    /* short sounds at random moments: a drop, a crackle, a chirp */
+    function scatter(kind, every, fire1) {
+        var tick = function () {
+            if (sound !== kind)
+                return;
+            fire1(audioCtx());
+            timers.push(setTimeout(tick, every()));
+        };
+        timers.push(setTimeout(tick, 200));
+    }
+    function audioCtx() { return master ? master.context : null; }
+    function rain(c) {
+        var hiss = src(c, 'white'), h = filt(c, 'bandpass', 3000, .4, .08, master);
+        hiss.connect(h.input); wobble(c, .2, .02, h.gain.gain); hiss.start();
+        scatter('rain', function () { return 60 + Math.random() * 300; }, function (ctx) {
+            var now = ctx.currentTime, o = ctx.createOscillator(), g = ctx.createGain();
+            o.type = 'sine'; o.frequency.value = 1400 + Math.random() * 1200;
+            g.gain.setValueAtTime(.0001, now);
+            g.gain.exponentialRampToValueAtTime(.045, now + .003);
+            g.gain.exponentialRampToValueAtTime(.0001, now + .09);
+            o.connect(g); g.connect(master); o.start(now); o.stop(now + .1);
+        });
+    }
+    function fire(c) {
+        var low = src(c, 'brown'), lp = filt(c, 'lowpass', 350, .6, .35, master);
+        low.connect(lp.input); low.start();
+        scatter('fire', function () { return 80 + Math.random() * (Math.random() < .15 ? 900 : 380); }, function (ctx) {
+            var now = ctx.currentTime, len = Math.floor(ctx.sampleRate * .03), buf = ctx.createBuffer(1, len, ctx.sampleRate), data = buf.getChannelData(0), i;
+            for (i = 0; i < len; i++) data[i] = (Math.random() * 2 - 1) * (1 - i / len);
+            var s = ctx.createBufferSource(), hp = ctx.createBiquadFilter(), g = ctx.createGain();
+            s.buffer = buf; hp.type = 'highpass'; hp.frequency.value = 1200; g.gain.value = .25 + Math.random() * .2;
+            s.connect(hp); hp.connect(g); g.connect(master); s.start(now);
+        });
+    }
+    function birds(c) {
+        var n = 0;
+        scatter('birds', function () { return 1200 + Math.random() * 3800; }, function (ctx) {
+            var burst = 2 + Math.floor(Math.random() * 3), base = 2400 + Math.random() * 1000, k;
+            for (k = 0; k < burst; k++) {
+                (function (at, f0) {
+                    var o = ctx.createOscillator(), g = ctx.createGain();
+                    o.type = 'sine';
+                    o.frequency.setValueAtTime(f0, at);
+                    o.frequency.exponentialRampToValueAtTime(f0 * 1.35, at + .05);
+                    o.frequency.exponentialRampToValueAtTime(f0 * .95, at + .11);
+                    g.gain.setValueAtTime(.0001, at);
+                    g.gain.exponentialRampToValueAtTime(.035, at + .01);
+                    g.gain.exponentialRampToValueAtTime(.0001, at + .12);
+                    o.connect(g); g.connect(master); o.start(at); o.stop(at + .13);
+                })(ctx.currentTime + k * .16, base + k * 60);
+            }
+        });
+    }
+    /* ---- your own sounds: stored in your state (kept small so they save everywhere) ---- */
+    function playCustom(id) {
+        var list = D.store.S.settings.customSounds || [], s = list.filter(function (x) { return x.id === id; })[0];
+        if (!s)
+            return;
+        soundAudio = new Audio(s.dataUrl);
+        soundAudio.loop = true;
+        soundAudio.volume = D.store.S.settings.vol / 100;
+        soundAudio.play().catch(function () { D.ui.toast({ icon: 'volume', title: t('snd.playError') }); });
+    }
+    function pickCustom() {
+        var list = D.store.S.settings.customSounds || [];
+        if (list.length >= 6) {
+            D.ui.toast({ icon: 'x', title: t('snd.full') });
+            return;
+        }
+        var input = document.createElement('input');
+        input.type = 'file';
+        input.accept = 'audio/*';
+        input.onchange = function () {
+            var f = input.files && input.files[0];
+            if (!f)
+                return;
+            if (f.size > 2.5 * 1024 * 1024) {
+                D.ui.toast({ icon: 'x', title: t('snd.big') });
+                return;
+            }
+            var reader = new FileReader();
+            reader.onload = function () {
+                D.store.mutate(function (S) {
+                    S.settings.customSounds = (S.settings.customSounds || []).concat([{ id: Date.now().toString(36), name: f.name.replace(/\.[^.]+$/, ''), dataUrl: reader.result }]);
+                });
+                D.refresh();
+            };
+            reader.readAsDataURL(f);
+        };
+        input.click();
+    }
+    function removeCustom(id) {
+        if (sound === 'custom:' + id) {
+            sound = 'off';
+            stopSound();
+        }
+        D.store.mutate(function (S) { S.settings.customSounds = (S.settings.customSounds || []).filter(function (x) { return x.id !== id; }); });
+        D.refresh();
+    }
+    /* the ambience row: icons only (the names live in aria-labels for screen readers) */
+    function ambienceHTML() {
+        var custom = D.store.S.settings.customSounds || [];
+        var base = [['cafe', 'coffee'], ['stream', 'droplet'], ['brown', 'wind'], ['pad', 'wave'], ['rain', 'cloudrain'], ['fire', 'flame'], ['birds', 'feather']];
+        var html = base.map(function (b) {
+            return '<button class="chip icon-chip" data-sound="' + b[0] + '" aria-pressed="false" aria-label="' + esc(t('snd.' + b[0])) + '">' + D.icon(b[1]) + '</button>';
+        }).join('');
+        html += custom.map(function (c) {
+            return '<span class="chip-own"><button class="chip icon-chip" data-sound="custom:' + esc(c.id) + '" aria-pressed="false" aria-label="' + esc(c.name) + '">' + D.icon('music') + '</button>' +
+                '<button class="ib sm" data-del-sound="' + esc(c.id) + '" aria-label="' + esc(t('common.delete')) + '">' + D.icon('x') + '</button></span>';
+        }).join('');
+        html += '<button class="chip icon-chip add" data-add-sound aria-label="' + esc(t('snd.add')) + '">' + D.icon('plus') + '</button>';
+        return '<div class="chips icons">' + html + '</div>';
+    }
     function stopSound() {
+        timers.forEach(function (id) { clearTimeout(id); });
+        timers = [];
         nodes.forEach(function (n) { try {
             if (n.stop)
                 n.stop();
@@ -205,11 +360,8 @@
         }
     }
     function startSound(kind) {
-        if (kind === 'cafe' || kind === 'stream') {
-            soundAudio = new Audio('assets/sounds/blanket-' + (kind === 'cafe' ? 'coffee-shop' : 'stream') + '.ogg');
-            soundAudio.loop = true;
-            soundAudio.volume = D.store.S.settings.vol / 100;
-            soundAudio.play().catch(function () { D.ui.toast({ icon: 'volume', title: t('snd.playError') }); });
+        if (kind.indexOf('custom:') === 0) {
+            playCustom(kind.slice(7));
             return;
         }
         var c = mctx();
@@ -232,6 +384,21 @@
                 g.connect(master);
                 src.start();
                 nodes.push(src, f1, f2, g);
+            }
+            else if (kind === 'cafe') {
+                cafe(c);
+            }
+            else if (kind === 'stream') {
+                stream(c);
+            }
+            else if (kind === 'rain') {
+                rain(c);
+            }
+            else if (kind === 'fire') {
+                fire(c);
+            }
+            else if (kind === 'birds') {
+                birds(c);
             }
             else if (kind === 'pad') {
                 var lp = c.createBiquadFilter(), pg = c.createGain();
@@ -258,8 +425,16 @@
         paintSound();
         stopRain();
     }
-    document.addEventListener('click', function (e) { var sd = e.target.closest('[data-sound]'); if (sd)
-        setSound(sd.dataset.sound); });
+    document.addEventListener('click', function (e) {
+        var sd = e.target.closest('[data-sound]');
+        if (sd)
+            return setSound(sd.dataset.sound);
+        if (e.target.closest('[data-add-sound]'))
+            return pickCustom();
+        var del = e.target.closest('[data-del-sound]');
+        if (del)
+            removeCustom(del.dataset.delSound);
+    });
     document.addEventListener('input', function (e) {
         if (!e.target.matches('[data-vol]'))
             return;
@@ -304,7 +479,7 @@
     window.addEventListener('resize', function () { if (raf)
         sizeRain(); });
     D.focus = {
-        render: render, bind: bind, paintSound: paintSound, refreshRainColor: function () { if (raf)
+        render: render, bind: bind, paintSound: paintSound, ambienceHTML: ambienceHTML, refreshRainColor: function () { if (raf)
             rcol = getComputedStyle(document.documentElement).getPropertyValue('--rain-c').trim() || rcol; },
         startIfIdle: function () { if (!T.running) {
             if (T.mode !== 'focus')
